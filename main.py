@@ -4,7 +4,7 @@ import pandas as pd
 from pydantic import BaseModel
 
 # Load the trained model
-model = joblib.load('best_rf_model.pkl')
+model = joblib.load('best_rf_model.joblib')
 
 app = FastAPI()
 
