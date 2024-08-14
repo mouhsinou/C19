@@ -67,13 +67,26 @@ elif option == 'Prédiction pour plusieurs patients':
     
     if uploaded_file is not None:
         data = pd.read_csv(uploaded_file)
+        
+        # Check if 'Patient_ID' column exists
         if 'Patient_ID' in data.columns:
+            patient_ids = data['Patient_ID']
             data = data.drop(columns=['Patient_ID'])
-            
+        else:
+            patient_ids = pd.Series([f'Patient_{i+1}' for i in range(len(data))])
+
         if st.button('Faire la prédiction pour CSV'):
             response = requests.post('https://covid-19-api3.onrender.com/predict_batch/', json=data.to_dict(orient='records'))
             if response.status_code == 200:
-                st.write('Prédictions:')
-                st.write(response.json()['predictions'])
+                predictions = response.json()['predictions']
+                
+                # Create a DataFrame with Patient_ID and predictions
+                result_df = pd.DataFrame({
+                    'Patient_ID': patient_ids,
+                    'Prediction': predictions
+                })
+                
+                st.write("Résultats des prédictions :")
+                st.dataframe(result_df)
             else:
                 st.error('Erreur dans la prédiction. Veuillez vérifier les valeurs saisies.')
