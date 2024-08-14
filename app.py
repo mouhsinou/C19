@@ -4,7 +4,7 @@ import pandas as pd
 
 st.title('COVID-19 Diagnosis from Breath Analysis')
 
-st.header('Enter Patient Data')
+st.header('Entrez les informations de patient')
 
 # Create input fields for each feature
 input_data = {}
